@@ -14,30 +14,31 @@ Initializer::~Initializer() {
 }
 
 int Initializer::checkCoordinates(Coordinates coordinates) {
-	for (auto coordinate : coordinates) {
-		if (coordinate < LOWER_THRESH || coordinate > UPPER_THRESH)
-			return COORDINATES_UNAPPROPRIATE;
+	if (coordinates.size() == BANK_SIZE) {
+		for (auto coordinate : coordinates) {
+			if (coordinate < LOWER_THRESH - PLACEMENT_DIFFERENCE || coordinate > UPPER_THRESH - PLACEMENT_DIFFERENCE)
+				return COORDINATES_UNAPPROPRIATE;
+		}
 	}
 	
 	return COORDINATES_APPROPRIATE;
 }
 
 int Initializer::checkIntersection(Country* c1, Country* c2) {
-	if ((c1->getxL() >= c2->getxR() && c1->getyL() <= c2->getyR()) ||
-		(c1->getxR() <= c2->getxL() && c1->getyL() <= c2->getyR()) ||
-		(c1->getxR() <= c2->getxL() && c1->getyR() >= c2->getyL()) ||
-		(c1->getxL() >= c2->getxR() && c1->getyR() >= c2->getyL()))
-		return INTERSECTION_FOUND;
-
+	if ((c1->getyL() <= c2->getyL() && c1->getyR() >= c2->getyR()) || (c1->getyL() <= c2->getyR() && c1->getyR() >= c2->getyR())) {
+		if ((c1->getxR() <= c2->getxR() && c1->getxL() >= c2->getxR()) || (c1->getxR() <= c2->getxL() && c1->getxL() >= c2->getxL()))
+			return INTERSECTION_FOUND;
+	}
+	
 	return INTERSECTION_NOT_FOUND;
 }
 
-InitializerOperationState Initializer::checkCountries(Countries& countries) {
+int Initializer::checkCountries(Countries& countries) {
 		for (auto country : countries) {
 			if (!checkCoordinates(country->getCoordinates())) {
 				countries.clear();
 
-				return;
+				return 0;
 			}
 		}
 
@@ -49,22 +50,41 @@ InitializerOperationState Initializer::checkCountries(Countries& countries) {
 				if (checkIntersection(countries[i], country)) {
 					countries.clear();
 
-					return;
+					return 0;
 				}
 			}
 		}
+
+		return 1;
 }
 
 InitializerOperationState Initializer::initData(std::vector<string>& cases, std::vector<Countries>& countriesDB, string filePath) {
 	std::ifstream initFile(filePath);
 	string buffer;
 
+	int casesCounter = 0;
+
+	// Pre-initialization required
+	std::getline(initFile, buffer);
+	cases.push_back(buffer);
+	countriesDB.push_back(Countries());
+
 	while (std::getline(initFile, buffer)) {
 		if (buffer.find(CASE) != string::npos)
 		{
+			if (!checkCountries(countriesDB.back()))
+			{
+				countriesDB.erase(countriesDB.begin() + casesCounter);
+				cases.erase(cases.begin() + casesCounter);
+
+				casesCounter--;
+			}
+
 			cases.push_back(buffer);
 
 			countriesDB.push_back(Countries());
+
+			casesCounter++;
 		}
 		else {
 			std::vector<string> splitResult;
@@ -79,7 +99,13 @@ InitializerOperationState Initializer::initData(std::vector<string>& cases, std:
 
 			countriesDB.back().push_back(new Country(splitResult));
 		}
+	}
 
-		checkCountries(countriesDB.back());
+	if (!checkCountries(countriesDB.back()))
+	{
+		countriesDB.erase(countriesDB.begin() + casesCounter);
+		cases.erase(cases.begin() + casesCounter);
+
+		casesCounter--;
 	}
 }

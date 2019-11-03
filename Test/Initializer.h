@@ -13,6 +13,7 @@
 
 #define LOWER_THRESH 1
 #define UPPER_THRESH 10
+#define PLACEMENT_DIFFERENCE 1
 
 #define COORDINATES_UNAPPROPRIATE 0
 #define COORDINATES_APPROPRIATE 1
@@ -24,7 +25,7 @@ typedef void InitializerOperationState;
 
 class Initializer {
 private:
-	InitializerOperationState checkCountries(Countries&);
+	int checkCountries(Countries&);
 
 	int checkCoordinates(Coordinates);
 	int checkIntersection(Country*, Country*);

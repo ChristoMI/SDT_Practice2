@@ -18,22 +18,15 @@ int main()
 
 	for (int i = 0; i < cases.size(); i++)
 	{
-		if (!countryDB[i].empty())
-		{
-			map->initStructure(countryDB[i]);
+		map->initStructure(countryDB[i]);
 
-			map->shuffle(countryDB[i]);
+		map->shuffle(countryDB[i]);
 
-			sort(countryDB[i].begin(), countryDB[i].end(), Country::comparator);
+		sort(countryDB[i].begin(), countryDB[i].end(), Country::comparator);
 
-			std::cout << cases[i] << std::endl;
-			for (auto &country : countryDB[i])
-				std::cout << country->getName() << '\t' << country->getSteps() << std::endl;
-		}
-		else {
-			countryDB.erase(countryDB.begin() + i);
-			cases.erase(cases.begin() + i);
-		}
+		std::cout << cases[i] << std::endl;
+		for (auto &country : countryDB[i])
+			std::cout << country->getName() << '\t' << country->getSteps() << std::endl;
 	}
 
 	clearMemory();

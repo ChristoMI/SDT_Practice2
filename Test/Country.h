@@ -11,6 +11,8 @@
 #define NAME_POS 0
 #define X_L_POS 1
 
+#define BANK_SIZE 4
+
 typedef std::string string;
 
 typedef int Coordinate;
