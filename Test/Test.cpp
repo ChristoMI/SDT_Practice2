@@ -2,41 +2,43 @@
 #include <iostream>
 
 #include "ConfigData.h"
+#include "Displayer.h"
 
 Initializer* initializer = new Initializer();
 
 std::vector<string> cases;
-std::vector<Countries> countryDB;
+std::vector<Countries> countriesDB;
 
 DiffusionMap* map = new DiffusionMap();
+
+Displayer* displayer = new Displayer();
 
 void clearMemory();
 
 int main()
 {
-	initializer->initData(cases, countryDB, INIT_DATA_PATH);
+	initializer->initData(cases, countriesDB, INIT_DATA_PATH);
 
 	for (int i = 0; i < cases.size(); i++)
 	{
-		map->initStructure(countryDB[i]);
+		map->initStructure(countriesDB[i]);
 
-		map->shuffle(countryDB[i]);
+		map->shuffle(countriesDB[i]);
 
-		sort(countryDB[i].begin(), countryDB[i].end(), Country::comparator);
+		sort(countriesDB[i].begin(), countriesDB[i].end(), Country::comparator);
 
-		std::cout << cases[i] << std::endl;
-		for (auto &country : countryDB[i])
-			std::cout << country->getName() << '\t' << country->getSteps() << std::endl;
+		displayer->display(cases[i], countriesDB[i]);
 	}
 
 	clearMemory();
 }
 
 void clearMemory() {
-	for (int i = 0; i < countryDB.size(); i++)
-		for (int j = 0; j < countryDB[i].size(); j++)
-			delete countryDB[i][j];
+	for (int i = 0; i < countriesDB.size(); i++)
+		for (int j = 0; j < countriesDB[i].size(); j++)
+			delete countriesDB[i][j];
 
 	delete map;
 	delete initializer;
+	delete displayer;
 }
