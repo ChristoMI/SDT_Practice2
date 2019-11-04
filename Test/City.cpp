@@ -19,7 +19,7 @@ int City::getNeighborsNumber()
 }
 
 City::City(int capacity, int id) {
-	for (int i = 0; i < capacity; i++) {
+	for (int coinID = 0; coinID < capacity; coinID++) {
 		bank.push_back(0);
 		imported.push_back(0);
 	}
@@ -34,25 +34,25 @@ OperationState City::addNeighbor(City* newNeighbor) {
 }
 
 OperationState City::exportCoins() {
-	for (int i = 0; i < bank.size(); i++) {
-		int change = bank[i] / THRESHOLD_VALUE;
+	for (int coinID = 0; coinID < bank.size(); coinID++) {
+		int change = bank[coinID] / THRESHOLD_VALUE;
 
 		for (auto &neighbor : neighbors) {
-			neighbor->addImport(change, i);
-			bank[i] -= change;
+			neighbor->addImport(change, coinID);
+			bank[coinID] -= change;
 		}
 	}
 
 }
 
 OperationState City::importCoins() {
-	for (int i = 0; i < bank.size(); i++)
+	for (int coinID = 0; coinID < bank.size(); coinID++)
 	{
-		if (bank[i] == 0 && imported[i] != 0)
+		if (bank[coinID] == 0 && imported[coinID] != 0)
 			state++;
 
-		bank[i] += imported[i];
-		imported[i] = 0;
+		bank[coinID] += imported[coinID];
+		imported[coinID] = 0;
 	}
 }
 
@@ -62,13 +62,4 @@ OperationState City::addImport(int change, int coinID) {
 
 CompletionState City::isCompleted() {
 	return (int)(state == 1);
-}
-
-std::string City::showCoins()
-{
-	std::string qwe ="";
-	for (int i = 0; i < bank.size(); i++)
-		qwe +=std::to_string(bank[i]) + "|";
-
-	return qwe;
 }

@@ -42,12 +42,12 @@ int Initializer::checkCountries(Countries& countries) {
 			}
 		}
 
-		for (int i = 0; i < countries.size(); i++) {
+		for (int countryID = 0; countryID < countries.size(); countryID++) {
 			Countries otherCountries = countries;
-			otherCountries.erase(otherCountries.begin() + i);
+			otherCountries.erase(otherCountries.begin() + countryID);
 
 			for (auto country : otherCountries) {
-				if (checkIntersection(countries[i], country)) {
+				if (checkIntersection(countries[countryID], country)) {
 					countries.clear();
 
 					return 0;

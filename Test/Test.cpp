@@ -19,24 +19,24 @@ int main()
 {
 	initializer->initData(cases, countriesDB, INIT_DATA_PATH);
 
-	for (int i = 0; i < cases.size(); i++)
+	for (int caseID = 0; caseID < cases.size(); caseID++)
 	{
-		map->initStructure(countriesDB[i]);
+		map->initStructure(countriesDB[caseID]);
 
-		map->shuffle(countriesDB[i]);
+		map->shuffle(countriesDB[caseID]);
 
-		sort(countriesDB[i].begin(), countriesDB[i].end(), Country::comparator);
+		sort(countriesDB[caseID].begin(), countriesDB[caseID].end(), Country::comparator);
 
-		displayer->display(cases[i], countriesDB[i]);
+		displayer->display(cases[caseID], countriesDB[caseID]);
 	}
 
 	clearMemory();
 }
 
 void clearMemory() {
-	for (int i = 0; i < countriesDB.size(); i++)
-		for (int j = 0; j < countriesDB[i].size(); j++)
-			delete countriesDB[i][j];
+	for (int caseID = 0; caseID < countriesDB.size(); caseID++)
+		for (int countryID = 0; countryID < countriesDB[caseID].size(); countryID++)
+			delete countriesDB[caseID][countryID];
 
 	delete map;
 	delete initializer;

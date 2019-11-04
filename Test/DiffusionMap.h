@@ -8,6 +8,11 @@
 #define X_COORDS 0
 #define Y_COORDS 1
 
+#define COMPLETE_STATE_VALUE 1
+
+#define SINGLE_COUNTRY 1
+
+#define NEIGHBOR_OFFSET 1
 
 typedef void MapOperationState;
 

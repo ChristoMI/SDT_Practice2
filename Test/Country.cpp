@@ -80,13 +80,13 @@ CountryOperationState Country::increaseSteps() {
 
 int Country::comparator(Country* c1, Country* c2) {
 	if (c1->completionSteps < c2->completionSteps)
-		return 1;
+		return COMPARISON_RIGHT;
 	else if (c1->completionSteps > c2->completionSteps)
-		return 0;
+		return COMPARISON_WRONG;
 	else {
 		if (c1->name < c2->name)
-			return 1;
+			return COMPARISON_RIGHT;
 		else
-			return 0;
+			return COMPARISON_WRONG;
 	}
 }

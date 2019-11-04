@@ -13,6 +13,9 @@
 
 #define BANK_SIZE 4
 
+#define COMPARISON_WRONG 0
+#define COMPARISON_RIGHT 1
+
 typedef std::string string;
 
 typedef int Coordinate;

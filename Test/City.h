@@ -41,7 +41,4 @@ public:
 	OperationState importCoins();
 
 	CompletionState isCompleted();
-
-
-	std::string showCoins();
 };
