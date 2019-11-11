@@ -5,8 +5,9 @@
 #include "Country.h"
 
 Country::Country() {
-	// TODO Auto-generated constructor stub
+	name = "";
 
+	completionSteps = 0;
 }
 
 CountryOperationState Country::swap(Coordinate& c1, Coordinate& c2) {
@@ -15,7 +16,7 @@ CountryOperationState Country::swap(Coordinate& c1, Coordinate& c2) {
 	c2 = t;
 }
 
-Country::Country(std::vector<string> splitString) {
+Country::Country(const std::vector<string>& splitString) {
 	name = splitString[NAME_POS];
 
 	for (auto &pos : std::vector<string>(splitString.begin() + X_L_POS, splitString.end()))
@@ -27,10 +28,6 @@ Country::Country(std::vector<string> splitString) {
 		swap(area[Y_L], area[Y_R]);
 
 	state = 1 - (area[X_L] - area[X_R] + 1) * (area[Y_R] - area[Y_L] + 1);
-}
-
-Country::~Country() {
-	// TODO Auto-generated destructor stub
 }
 
 Coordinate Country::getxL() {
@@ -71,14 +68,17 @@ CountryOperationState Country::update() {
 
 
 CompletionState Country::isCompleted() {
-	return (CompletionState)(state == COMPLETED);
+	if (state == COMPLETED)
+		return true;
+	else
+		return false;
 }
 
 CountryOperationState Country::increaseSteps() {
 	completionSteps++;
 }
 
-int Country::comparator(Country* c1, Country* c2) {
+int Country::comparator(const Country* c1, const Country* c2) {
 	if (c1->completionSteps < c2->completionSteps)
 		return COMPARISON_RIGHT;
 	else if (c1->completionSteps > c2->completionSteps)

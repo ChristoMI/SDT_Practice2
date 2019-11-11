@@ -4,25 +4,17 @@
 
 #include "City.h"
 
-City::City() {
-	// TODO Auto-generated constructor stub
-
-}
-
-City::~City() {
-	// TODO Auto-generated destructor stub
-}
-
 int City::getNeighborsNumber()
 {
 	return neighbors.size();
 }
 
 City::City(int capacity, int id) {
-	for (int coinID = 0; coinID < capacity; coinID++) {
-		bank.push_back(0);
-		imported.push_back(0);
-	}
+	bank.reserve(capacity);
+	bank.assign(capacity, 0);
+
+	imported.reserve(capacity);
+	imported.assign(capacity, 0);
 
 	state = DEFAULT_STATE - (capacity - DEFAULT_STATE);
 
@@ -61,5 +53,8 @@ OperationState City::addImport(int change, int coinID) {
 }
 
 CompletionState City::isCompleted() {
-	return (int)(state == 1);
+	if (state == COMPLETED)
+		return true;
+	else
+		return false;
 }

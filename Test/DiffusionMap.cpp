@@ -1,19 +1,7 @@
 #include "pch.h"
 #include "DiffusionMap.h"
 
-DiffusionMap::DiffusionMap() {
-	// TODO Auto-generated constructor stub
-
-}
-
-DiffusionMap::~DiffusionMap() {
-	for (int i = 0; i < this->rows; i++)
-		delete map[i];
-
-	delete map;
-}
-
-std::pair<Coordinates, Coordinates> DiffusionMap::composeCoordinates(Countries countries) {
+std::pair<Coordinates, Coordinates> DiffusionMap::composeCoordinates(const Countries& countries) {
 	Coordinates xH;
 	Coordinates yH;
 
@@ -25,14 +13,32 @@ std::pair<Coordinates, Coordinates> DiffusionMap::composeCoordinates(Countries c
 	return { xH, yH };
 }
 
-MapOperationState DiffusionMap::generateField(std::pair<Coordinates, Coordinates> coordinates) {
+MapOperationState DiffusionMap::generateField(const std::pair<Coordinates, Coordinates>& coordinates) {
 	this->rows = *(std::max_element(coordinates.first.begin(), coordinates.first.end())) + 1;
 	this->columns = *(std::max_element(coordinates.second.begin(), coordinates.second.end())) + 1;
 
-	map = new City**[this->rows];
 
 	for (int i = 0; i < this->rows; i++)
-		map[i] = new City*[this->columns]{ NULL };
+	{
+		map.push_back(std::vector<City*>());
+
+		for (int j = 0; j < this->columns; j++)
+			map[i].push_back(NULL);
+	}
+}
+
+MapOperationState DiffusionMap::checkNeighbors(const Coordinate& xPos, const Coordinate& yPos) {
+	if (xPos > 0 && map[xPos - NEIGHBOR_OFFSET][yPos] != NULL)
+		map[xPos][yPos]->addNeighbor(map[xPos - NEIGHBOR_OFFSET][yPos]);
+
+	if (xPos < this->rows - NEIGHBOR_OFFSET && map[xPos + NEIGHBOR_OFFSET][yPos] != NULL)
+		map[xPos][yPos]->addNeighbor(map[xPos + NEIGHBOR_OFFSET][yPos]);
+
+	if (yPos > 0 && map[xPos][yPos - NEIGHBOR_OFFSET] != NULL)
+		map[xPos][yPos]->addNeighbor(map[xPos][yPos - NEIGHBOR_OFFSET]);
+
+	if (yPos < this->columns - NEIGHBOR_OFFSET && map[xPos][yPos + NEIGHBOR_OFFSET] != NULL)
+		map[xPos][yPos]->addNeighbor(map[xPos][yPos + NEIGHBOR_OFFSET]);
 }
 
 MapOperationState DiffusionMap::initCities(Countries& countries) {
@@ -43,25 +49,11 @@ MapOperationState DiffusionMap::initCities(Countries& countries) {
 		}
 	}
 
-	for (int countryID = 0; countryID < countries.size(); countryID++) {
-		for (int xPos = countries[countryID]->getxR(); xPos <= countries[countryID]->getxL(); xPos++) {
+	for (int countryID = 0; countryID < countries.size(); countryID++) 
+		for (int xPos = countries[countryID]->getxR(); xPos <= countries[countryID]->getxL(); xPos++) 
 			for (int yPos = countries[countryID]->getyL(); yPos <= countries[countryID]->getyR(); yPos++)
-			{
-				if (xPos > 0 && map[xPos - NEIGHBOR_OFFSET][yPos] != NULL)
-					map[xPos][yPos]->addNeighbor(map[xPos - NEIGHBOR_OFFSET][yPos]);
-
-				if (xPos < this->rows - NEIGHBOR_OFFSET && map[xPos + NEIGHBOR_OFFSET][yPos] != NULL)
-					map[xPos][yPos]->addNeighbor(map[xPos + NEIGHBOR_OFFSET][yPos]);
-
-				if (yPos > 0 && map[xPos][yPos - NEIGHBOR_OFFSET] != NULL)
-					map[xPos][yPos]->addNeighbor(map[xPos][yPos - NEIGHBOR_OFFSET]);
-
-				if (yPos < this->columns - NEIGHBOR_OFFSET && map[xPos][yPos + NEIGHBOR_OFFSET] != NULL)
-					map[xPos][yPos]->addNeighbor(map[xPos][yPos + NEIGHBOR_OFFSET]);
-			}
-		}
-
-	}
+				checkNeighbors(xPos, yPos);
+	
 }
 
 MapOperationState DiffusionMap::initStructure(Countries& countries) {
@@ -74,12 +66,15 @@ MapOperationState DiffusionMap::initStructure(Countries& countries) {
 }
 
 CompletionState DiffusionMap::isCompleted() {
-	return (CompletionState)(state == COMPLETED);
+	if (state == COMPLETED)
+		return true;
+	else
+		return false;
 }
 
 CompletionState DiffusionMap::shuffle(Countries& countries) {
 	if (countries.size() == SINGLE_COUNTRY)
-		return (CompletionState)(state == COMPLETED);
+		return true;
 	else
 	{
 		while (!isCompleted())
@@ -90,11 +85,11 @@ CompletionState DiffusionMap::shuffle(Countries& countries) {
 						map[xPos][yPos]->exportCoins();
 
 			for (auto &country : countries) {
-				int currentCountryStatus = country->isCompleted();
+				bool currentCountryStatus = country->isCompleted();
 
 				for (int xPos = country->getxR(); xPos <= country->getxL(); xPos++) {
 					for (int yPos = country->getyL(); yPos <= country->getyR(); yPos++) {
-						int currentCityStatus = map[xPos][yPos]->isCompleted();
+						bool currentCityStatus = map[xPos][yPos]->isCompleted();
 
 						map[xPos][yPos]->importCoins();
 
@@ -116,5 +111,8 @@ CompletionState DiffusionMap::shuffle(Countries& countries) {
 		}
 	}
 
-	return (CompletionState)(state == COMPLETED);
+	if (state == COMPLETED)
+		return true;
+	else
+		return false;
 }

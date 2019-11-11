@@ -28,10 +28,10 @@ private:
 	int checkCountries(Countries&);
 
 	int checkCoordinates(Coordinates);
-	int checkIntersection(Country*, Country*);
+	int checkIntersection(Country&, Country&);
 public:
-	Initializer();
-	virtual ~Initializer();
+	Initializer() {};
+	virtual ~Initializer() {};
 
 	InitializerOperationState initData(std::vector<string>&, std::vector<Countries>&, string);
 };

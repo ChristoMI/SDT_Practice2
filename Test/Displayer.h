@@ -5,9 +5,9 @@
 class Displayer
 {
 public:
-	Displayer();
-	~Displayer();
+	Displayer() {};
+	~Displayer() {};
 
-	void display(string, Countries);
+	void display(const string&, const Countries&);
 };
 

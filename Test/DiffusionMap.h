@@ -18,20 +18,22 @@ typedef void MapOperationState;
 
 class DiffusionMap {
 private:
-	City*** map;
+	std::vector<std::vector<City*>> map;
 
 	int rows;
 	int columns;
 
 	CompletionState state;
 private:
-	MapOperationState generateField(std::pair<Coordinates, Coordinates>);
+	MapOperationState generateField(const std::pair<Coordinates, Coordinates>&);
 
 	MapOperationState initCities(Countries&);
-	std::pair<Coordinates, Coordinates> composeCoordinates(Countries);
+	std::pair<Coordinates, Coordinates> composeCoordinates(const Countries&);
+
+	MapOperationState checkNeighbors(const Coordinate&, const Coordinate&);
 public:
-	DiffusionMap();
-	virtual ~DiffusionMap();
+	DiffusionMap() {};
+	virtual ~DiffusionMap() {};
 
 	MapOperationState initStructure(Countries&);
 

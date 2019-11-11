@@ -26,7 +26,6 @@ typedef void CountryOperationState;
 class Country {
 private:
 	Coordinates area = std::vector<Coordinate>();
-	City** cities;
 
 	CompletionState state;
 	int completionSteps;
@@ -38,9 +37,9 @@ public:
 
 	Country();
 
-	Country(std::vector<string>);
+	Country(const std::vector<string>&);
 
-	virtual ~Country();
+	virtual ~Country() {};
 
 	Coordinate getxR();
 	Coordinate getyR();
@@ -60,7 +59,7 @@ public:
 
 	CountryOperationState increaseSteps();
 
-	static int comparator(Country*, Country*);
+	static int comparator(const Country*, const Country*);
 };
 
 typedef std::vector<Country*> Countries;

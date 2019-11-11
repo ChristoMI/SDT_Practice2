@@ -4,15 +4,6 @@
 
 #include "Initializer.h"
 
-Initializer::Initializer() {
-	// TODO Auto-generated constructor stub
-
-}
-
-Initializer::~Initializer() {
-	// TODO Auto-generated destructor stub
-}
-
 int Initializer::checkCoordinates(Coordinates coordinates) {
 	if (coordinates.size() == BANK_SIZE) {
 		for (auto coordinate : coordinates) {
@@ -24,9 +15,12 @@ int Initializer::checkCoordinates(Coordinates coordinates) {
 	return COORDINATES_APPROPRIATE;
 }
 
-int Initializer::checkIntersection(Country* c1, Country* c2) {
-	if ((c1->getyL() <= c2->getyL() && c1->getyR() >= c2->getyR()) || (c1->getyL() <= c2->getyR() && c1->getyR() >= c2->getyR())) {
-		if ((c1->getxR() <= c2->getxR() && c1->getxL() >= c2->getxR()) || (c1->getxR() <= c2->getxL() && c1->getxL() >= c2->getxL()))
+int Initializer::checkIntersection(Country& c1, Country& c2) {
+	if ((c1.getyL() <= c2.getyL() && c1.getyR() >= c2.getyR()) ||
+		(c1.getyL() <= c2.getyR() && c1.getyR() >= c2.getyR()))
+	{
+		if ((c1.getxR() <= c2.getxR() && c1.getxL() >= c2.getxR()) ||
+			(c1.getxR() <= c2.getxL() && c1.getxL() >= c2.getxL()))
 			return INTERSECTION_FOUND;
 	}
 	
@@ -47,7 +41,7 @@ int Initializer::checkCountries(Countries& countries) {
 			otherCountries.erase(otherCountries.begin() + countryID);
 
 			for (auto country : otherCountries) {
-				if (checkIntersection(countries[countryID], country)) {
+				if (checkIntersection(*countries[countryID], *country)) {
 					countries.clear();
 
 					return 0;

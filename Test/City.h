@@ -16,7 +16,6 @@ typedef std::vector<Coin> Coins;
 
 class City {
 private:
-
 	CompletionState state;
 
 	Coins bank;
@@ -24,14 +23,14 @@ private:
 
 	OperationState addImport(int, int);
 
-	City();
+	City() {};
+	virtual ~City() {};
+
 	std::vector<City*> neighbors;
 public:
 
 	City(int, int);
-
-	virtual ~City();
-
+	
 	int getNeighborsNumber();
 
 	OperationState addNeighbor(City*);
