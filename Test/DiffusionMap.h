@@ -14,6 +14,10 @@
 
 #define NEIGHBOR_OFFSET 1
 
+#define DEFAULT_ROWS_VALUE 0
+#define DEFAULT_CLMNS_VALUE 0
+#define DEFAULT_STATE_VALUE 0
+
 typedef void MapOperationState;
 
 class DiffusionMap {
@@ -32,7 +36,7 @@ private:
 
 	MapOperationState checkNeighbors(const Coordinate&, const Coordinate&);
 public:
-	DiffusionMap() {};
+	DiffusionMap();
 	virtual ~DiffusionMap() {};
 
 	MapOperationState initStructure(Countries&);

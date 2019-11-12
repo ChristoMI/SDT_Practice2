@@ -68,10 +68,7 @@ CountryOperationState Country::update() {
 
 
 CompletionState Country::isCompleted() {
-	if (state == COMPLETED)
-		return true;
-	else
-		return false;
+	return state == COMPLETED;
 }
 
 CountryOperationState Country::increaseSteps() {

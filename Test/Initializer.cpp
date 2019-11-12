@@ -16,15 +16,10 @@ int Initializer::checkCoordinates(Coordinates coordinates) {
 }
 
 int Initializer::checkIntersection(Country& c1, Country& c2) {
-	if ((c1.getyL() <= c2.getyL() && c1.getyR() >= c2.getyR()) ||
-		(c1.getyL() <= c2.getyR() && c1.getyR() >= c2.getyR()))
-	{
-		if ((c1.getxR() <= c2.getxR() && c1.getxL() >= c2.getxR()) ||
-			(c1.getxR() <= c2.getxL() && c1.getxL() >= c2.getxL()))
-			return INTERSECTION_FOUND;
-	}
-	
-	return INTERSECTION_NOT_FOUND;
+	return ((c1.getyL() <= c2.getyL() && c1.getyR() >= c2.getyR()) ||
+		(c1.getyL() <= c2.getyR() && c1.getyR() >= c2.getyR())) &&
+		((c1.getxR() <= c2.getxR() && c1.getxL() >= c2.getxR()) ||
+		(c1.getxR() <= c2.getxL() && c1.getxL() >= c2.getxL()));
 }
 
 int Initializer::checkCountries(Countries& countries) {

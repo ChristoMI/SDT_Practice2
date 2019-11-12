@@ -53,8 +53,5 @@ OperationState City::addImport(int change, int coinID) {
 }
 
 CompletionState City::isCompleted() {
-	if (state == COMPLETED)
-		return true;
-	else
-		return false;
+	return state == COMPLETED;
 }

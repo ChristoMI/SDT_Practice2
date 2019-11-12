@@ -1,6 +1,13 @@
 #include "pch.h"
 #include "DiffusionMap.h"
 
+DiffusionMap::DiffusionMap() {
+	this->rows = DEFAULT_ROWS_VALUE;
+	this->columns = DEFAULT_CLMNS_VALUE;
+
+	this->state = DEFAULT_STATE_VALUE;
+}
+
 std::pair<Coordinates, Coordinates> DiffusionMap::composeCoordinates(const Countries& countries) {
 	Coordinates xH;
 	Coordinates yH;
@@ -62,14 +69,10 @@ MapOperationState DiffusionMap::initStructure(Countries& countries) {
 	state = COMPLETE_STATE_VALUE - countries.size();
 
 	initCities(countries);
-
 }
 
 CompletionState DiffusionMap::isCompleted() {
-	if (state == COMPLETED)
-		return true;
-	else
-		return false;
+	return state == COMPLETED;
 }
 
 CompletionState DiffusionMap::shuffle(Countries& countries) {
@@ -111,8 +114,5 @@ CompletionState DiffusionMap::shuffle(Countries& countries) {
 		}
 	}
 
-	if (state == COMPLETED)
-		return true;
-	else
-		return false;
+	return state == COMPLETED;
 }
